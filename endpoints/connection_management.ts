@@ -8,6 +8,49 @@ import User from "../app/user";
 import ErrorCodes  from "./error_codes";
 
 /**
+ * Cleans up the session by removing the user from it. If the leaving user
+ * also was the admin of the session, the session itself is deleted. The
+ * function returns true if the session was deleted in addition to removing
+ * the user from it or false if the session itself was not removed.
+ *
+ * @param orchestrator Reference to an orchestrator instance
+ * @param user User for which to clean up the session
+ * @returns True if the session was also deleted
+ */
+function cleanUpActiveSession(orchestrator: Orchestrator, user: User) {
+  const { session } = user;
+  session?.removeUser(user);
+
+  if (session?.administrator.id == user.id) {
+    session.closeSession();
+    orchestrator.removeSession(session);
+
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Gets all sessions that the given user is administrator of and forcibly
+ * closes them. This serves the purpose of cleaning up dangling sessions.
+ *
+ * @param orchestrator Reference to an orchestrator instance
+ * @param user User for which to clean up dangling sessions
+ * @returns Number of sessions closed
+ */
+function cleanUpDanglingSessions(orchestrator: Orchestrator, user: User) {
+  const administratedSessions = orchestrator.getAdministratedSessions(user);
+
+  administratedSessions.forEach((s) => {
+    s.closeSession();
+    orchestrator.removeSession(s);
+  });
+
+  return administratedSessions.length;
+}
+
+/**
  * Installs a handler which responds to the `LOGIN` message and creates a new
  * user object. The handler returns a promise which, when resolved, contains a
  * new user object instantiated with the params received in the request.
@@ -51,44 +94,6 @@ export const installLoginHandler =  async (orchestrator: Orchestrator, socket: i
 const installHandlers = (orchestrator: Orchestrator, user: User) => {
   const { socket } = user;
 
-  /**
-   * Cleans up the session by removing the user from it. If the leaving user
-   * also was the admin of the session, the session itself is deleted. The
-   * function returns true if the session was deleted in addition to removing
-   * the user from it or false if the session itself was not removed.
-   *
-   * @returns True if the session was also deleted
-   */
-  const cleanUpActiveSession = () => {
-    const { session } = user;
-    session?.removeUser(user);
-
-    if (session?.administrator.id == user.id) {
-      session.closeSession();
-      orchestrator.removeSession(session);
-
-      return true;
-    }
-
-    return false;
-  };
-
-  /**
-   * Gets all sessions that the given user is administrator of and forcibly
-   * closes them. This serves the purpose of cleaning up dangling sessions.
-   *
-   * @returns Number of sessions closed
-   */
-  const cleanUpDanglingSessions = () => {
-    const administratedSessions = orchestrator.getAdministratedSessions(user);
-
-    administratedSessions.forEach((s) => {
-      s.closeSession();
-      orchestrator.removeSession(s);
-    });
-
-    return administratedSessions.length;
-  };
 
   /**
    * Logs the user out from the orchestrator, removing them from their session
@@ -97,11 +102,11 @@ const installHandlers = (orchestrator: Orchestrator, user: User) => {
   socket.on(EndpointNames.LOGOUT, (data, callback) => {
     logger.debug(EndpointNames.LOGOUT, "Logged out user", user.name);
 
-    if (cleanUpActiveSession()) {
+    if (cleanUpActiveSession(orchestrator, user)) {
       logger.debug(EndpointNames.LOGOUT, "User was admin, closing session");
     }
 
-    const numSessionsCleaned = cleanUpDanglingSessions();
+    const numSessionsCleaned = cleanUpDanglingSessions(orchestrator, user);
     logger.debug(EndpointNames.LOGOUT, `Destroyed ${numSessionsCleaned} dangling sessions`);
 
     orchestrator.removeUser(user);
@@ -115,11 +120,11 @@ const installHandlers = (orchestrator: Orchestrator, user: User) => {
   socket.on("disconnect", () => {
     logger.debug("[DISCONNECT] Disconnected user", user.name);
 
-    if (cleanUpActiveSession()) {
+    if (cleanUpActiveSession(orchestrator, user)) {
       logger.debug("[DISCONNECT] User was admin, closing session");
     }
 
-    const numSessionsCleaned = cleanUpDanglingSessions();
+    const numSessionsCleaned = cleanUpDanglingSessions(orchestrator, user);
     logger.debug(EndpointNames.LOGOUT, `Destroyed ${numSessionsCleaned} dangling sessions`);
 
     orchestrator.removeUser(user);
