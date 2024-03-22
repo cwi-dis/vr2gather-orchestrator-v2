@@ -78,7 +78,13 @@ export const installLoginHandler =  async (orchestrator: Orchestrator, socket: i
         return;
       }
 
-      const user = orchestrator.findUser(userName) || new User(userName, socket);
+      const existingUser = orchestrator.findUser(userName);
+      if (existingUser) {
+        logger.warn(EndpointNames.LOGIN, `Found existing user with username ${userName} (${existingUser.id}). Terminating connection...`);
+        existingUser.socket.disconnect();
+      }
+
+      const user = new User(userName, socket);
       orchestrator.addUser(user);
 
       logger.debug(EndpointNames.LOGIN, "Added user", user.name, "to orchestrator");
@@ -125,7 +131,7 @@ const installHandlers = (orchestrator: Orchestrator, user: User) => {
     }
 
     const numSessionsCleaned = cleanUpDanglingSessions(orchestrator, user);
-    logger.debug(EndpointNames.LOGOUT, `Destroyed ${numSessionsCleaned} dangling sessions`);
+    logger.debug(`[DISCONNECT] Destroyed ${numSessionsCleaned} dangling sessions`);
 
     orchestrator.removeUser(user);
   });
