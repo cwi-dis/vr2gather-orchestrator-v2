@@ -17,6 +17,14 @@ and start the container by running
 This will build the container if it hasn't already been build and launch it on
 port 8090.
 
+### Note for Ubuntu users
+
+It is recommended that you use the latest version of Docker and all associated
+tools. The versions found in Ubuntu's official APT repositories are sometimes a
+bit outdated, therefore, we recommend you download Docker from Docker's APT
+repositories. Follow [this guide](https://docs.docker.com/engine/install/ubuntu/)
+to do so.
+
 ## Development
 
 ### Building
@@ -62,7 +70,12 @@ the `dump` script, passing in the hostname of an orchestrator instance:
 
 ### Terminate orchestrator
 
-In order to restart/terminate a orchestrator instance, use the `terminate`
-script, passing along the hostname of an instance:
+In order to restart/terminate a remote orchestrator instance, use the
+`terminate` script, passing along the hostname of an instance:
 
     node scripts/terminate.js localhost:8090
+
+If the orchestrator instance is running inside a Docker container using the
+supplied `docker-compose.yml` configuration, the Docker daemon will relaunch
+the container immediately. All data stored in the orchestrator at the time of
+termination will be lost.
