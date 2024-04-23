@@ -100,8 +100,8 @@ class TransportManager {
       // Add session to transport
       leastOccupiedTransport.addSession(session);
       return leastOccupiedTransport;
-    } catch {
-      logger.warn("No config for protocol type", protocol, "found! Using Socket.IO transport as fallback");
+    } catch (error) {
+      logger.error("Protocol type", protocol, ":", error, " Using DummyTransport as fallback");
 
       // Return DummyTransport in case of error
       return new DummyTransport();
