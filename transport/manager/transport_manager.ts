@@ -24,7 +24,6 @@ class TransportManager {
    * @returns An instantiated transport, depending on the value of `protocol`
    */
   public assignTransport(protocol: TransportType, session: Session): Transport {
-    logger.debug("Assigning dummy transport to session", protocol);
     switch (protocol) {
     case "webrtc":
       logger.debug("Assigning external transport to WebRTC session", session.name);
