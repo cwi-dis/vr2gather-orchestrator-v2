@@ -23,7 +23,7 @@
   "logFilePfx": "webrtc-",
   "logFileSfx": ".log",
   "commandLine": [
-    "/Users/jack/src/VRTogether/WebRTCSFU/sfu-Darwin-i386.exe",
+    "/packages/webrtc/sfu-Linux-x86_64.exe",
     "--addr",
     ":%SFU_PORT%"
   ]
