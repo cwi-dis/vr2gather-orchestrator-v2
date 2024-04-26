@@ -6,7 +6,7 @@ ADD config/package[s] /packages
 WORKDIR /code
 
 # These packages are needed to run evanescent and the webrtc sfu
-RUN apk install ld-linux-x86-64.so.2 gcompat
+RUN apk add gcompat
 
 RUN yarn install && \
     yarn build && \
