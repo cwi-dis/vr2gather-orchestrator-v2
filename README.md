@@ -18,7 +18,7 @@ one returns a valid response. Adding an entry with the key-value pair
 `"server": "localtime"` will return the host's local time without querying an
 NTP server. 
 
-Install the required external tools (the Dash and WebRTC SFU's) into `config/packages`.
+Install the required external tools (the Dash and WebRTC SFU's) into `./packages/`.
 Pre-packaged versions can be found in the `external-packages` directory.
 
 After setting up the config, simply build and start the container
