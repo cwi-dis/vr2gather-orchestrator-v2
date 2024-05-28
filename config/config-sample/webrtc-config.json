@@ -25,6 +25,6 @@
   "commandLine": [
     "/packages/webrtc/sfu-Linux-x86_64.exe",
     "--addr",
-    ":%SFU_PORT%"
+    "%EXTERNAL_HOSTNAME%:%SFU_PORT%"
   ]
 }
