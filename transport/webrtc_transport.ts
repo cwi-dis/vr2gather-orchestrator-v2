@@ -12,8 +12,6 @@ class WebRTCTransport extends ExternalTransport {
       super(externalHostname, transportConfig, port);
       this.transportConfig.commandLine.forEach( (arg) => {
           this.cmdLine.push(arg.replace(
-            "%EXTERNAL_HOSTNAME%", this.externalHostname
-          ).replace(
             "%SFU_PORT%", this.transportConfig.portMapping[0].port.toString()
           ));
       });
