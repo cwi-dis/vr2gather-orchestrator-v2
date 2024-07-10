@@ -19,7 +19,7 @@ one returns a valid response. Adding an entry with the key-value pair
 NTP server. 
 
 Install the required external tools (the Dash and WebRTC SFU's) into `config/packages`.
-Pre-packaged versions can be found in the `external-packages` directory.
+ There are scripts in `external-packages` to download and install the external tools, see [external-packages/README.md](external-packages/README.md).
 
 After setting up the config, simply build and start the container
 by running
@@ -37,6 +37,10 @@ bit outdated, therefore, we recommend you download Docker from Docker's APT
 repositories. Follow [this guide](https://docs.docker.com/engine/install/ubuntu/)
 to do so.
 
+### Note on rebuilding the container
+
+If you have changed the configuration or SFU binaries you will have to rebuild the container, this does not happen automatically. Instructions will be provided.
+
 ## Development
 
 ### Building
@@ -53,7 +57,10 @@ run:
 After compiling it, make sure to copy the file `.env-sample` to `.env` and
 update the environment variables as needed. Moreover, copy the file
 `config/config-sample/ntp-config.json` to `config/ntp-config.json` and change
-the hostname/port of your time server if needed. Then, the application server
+the hostname/port of your time server if needed. 
+Then you may want to install versions of the Dash and WebRTC SFUs that are compatible with your development machine, and ensure that `dash-config.json` and `webrtc-config.json` have the right pathnames.
+
+Finally, the application server
 can be launched as follows:
 
     yarn start

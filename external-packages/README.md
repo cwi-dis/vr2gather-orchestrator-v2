@@ -14,7 +14,7 @@ Check <https://github.com/jvdrhoof/WebRTCSFU> for the latest current release _vX
 
 ##  dash sfu
 
-The `evanescent.tgz` package was built from a repository that will be open sourced in the near future but is currently still private.
+The dash SFU is called `evanescent`. It is currently not open source, but it is freely usable. It is obtained from the <https://github.com/cwi-dis/VR2G-Evanescent> repository.
 
 To install it run
 
