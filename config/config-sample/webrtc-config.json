@@ -23,7 +23,7 @@
   "logFilePfx": "webrtc-",
   "logFileSfx": ".log",
   "commandLine": [
-    "/packages/webrtc/bin/WebRTCSFU-sfu",
+    "packages/webrtc/bin/WebRTCSFU-sfu",
     "--addr",
     "0.0.0.0:%SFU_PORT%"
   ]
