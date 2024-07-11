@@ -1,31 +1,26 @@
 import ExternalTransport from "./external_transport";
-import User from "../app/user";
 
-class DashTransport extends ExternalTransport {
-  protected type = "Dash";
+class TCPReflectorTransport extends ExternalTransport {
+  protected type = "TCPReflector";
   protected cmdLine: Array<string> = this.transportConfig.commandLine;
   protected port: number;
 
-  private buildUrl(urlTemplate: string, user: User) {
+  private buildUrl(urlTemplate: string) {
     return urlTemplate.replace(
       "%EXTERNAL_HOSTNAME%", this.externalHostname
-    ).replace(
-      "%SESSION_ID%", user.session?.id || ""
-    ).replace(
-      "%USER_ID%", user.id
     );
   }
 
-  public getUrls(user: User) {
+  public getUrls() {
     const portMapping = this.transportConfig.portMapping.find((p) => p.port == this.port);
 
     if (portMapping) {
       const { sfuData } = portMapping;
 
       return {
-        url_gen: this.buildUrl(sfuData.url_gen, user),
-        url_audio: this.buildUrl(sfuData.url_audio, user),
-        url_pcc: this.buildUrl(sfuData.url_pcc, user)
+        url_gen: this.buildUrl(sfuData.url_gen),
+        url_audio: this.buildUrl(sfuData.url_audio),
+        url_pcc: this.buildUrl(sfuData.url_pcc),
       };
     }
 
@@ -37,4 +32,4 @@ class DashTransport extends ExternalTransport {
   }
 }
 
-export default DashTransport;
+export default TCPReflectorTransport;
