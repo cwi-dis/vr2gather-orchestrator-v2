@@ -1,16 +1,15 @@
-FROM node:22-alpine3.18
+FROM node:22-bookworm-slim
 
 ADD . /code/
 ADD ./package[s] /packages
 
 WORKDIR /code
 
-# These packages are needed to run evanescent and the webrtc sfu
-RUN apk add gcompat
-# Add evanescent directory to search path
-RUN echo "/lib:/usr/local/lib:/usr/lib:/packages/evanescent" > /etc/ld-musl-x86_64.path
+# Add evanescent directory to library search path
+RUN echo "/packages/evanescent" > /etc/ld.so.conf.d/evanescent.conf && ldconfig
+
 # Install Python for TCP reflector
-RUN apk add --update --no-cache python3
+RUN apt update && apt install -y python3
 
 RUN yarn install && \
     yarn build && \
