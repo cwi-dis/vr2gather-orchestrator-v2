@@ -25,6 +25,8 @@
   "commandLine": [
     "packages/webrtc/bin/WebRTCSFU-sfu",
     "--addr",
-    "0.0.0.0:%SFU_PORT%"
+    "0.0.0.0:%SFU_PORT%",
+    "-p",
+    "9000:9999"
   ]
 }
