@@ -10,5 +10,6 @@ curl --location --output tmp/$distr.tar.gz https://github.com/cwi-dis/lldash/rel
 rm -rf tmp/$distr
 (cd tmp && tar xfv $distr.tar.gz)
 rm -rf ../packages/lldash
+mkdir -p ../packages/lldash
 mv tmp/$distr ../packages/lldash
 rm -rf tmp
