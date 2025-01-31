@@ -20,7 +20,7 @@ services:
       - "8097:8097"
       - "8098:8098"
       - "8099:8099"
-      - "9000-9999/udp"
+      - "9000-9100:9000-9100/udp"
     command: yarn start
     logging:
       options:
