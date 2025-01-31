@@ -29,6 +29,6 @@ Darwin)
 	;;
 esac
 rm -rf ../packages/webrtc
-mkdir -p ../packages/webrtc
+mkdir -p ../packages
 mv tmp/webrtc ../packages/webrtc
 rm -rf tmp
