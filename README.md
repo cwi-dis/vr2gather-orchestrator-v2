@@ -63,12 +63,29 @@ the folder `/packages`. Keep this in mind when writing SFU config files. The
 corresponding config file must be placed into the folder `config/`. See the
 file `config/config-sample/webrtc-config.json` as a sample.
 
+### Rebuilding the docker image
+
 If you have changed the configuration or SFU binaries you will have to rebuild
 the container, this does not happen automatically:
 
     docker compose stop
     docker compose build
     docker compose up
+
+### Using a docker image from the registry
+
+If you are a member of the CWI DIS group you can download the image from the registry. Tom or Jack can provide you with the credentials needed for the login.
+
+```
+docker compose stop
+docker login registry.dis.cwi.nl
+... enter the credentials...
+docker pull registry.dis.cwi.nl/vr2gather-orchestrator-v2:2.7.1
+docker image tag registry.dis.cwi.nl/vr2gather-orchestrator-v2:2.7.1 registry.dis.cwi.nl/vr2gather-orchestrator-v2:latest
+docker compose up
+```
+
+You replace `2.7.1` with the version you want to run. And probably Tom will fix things and edit this.
 
 ## Development
 
