@@ -24,10 +24,10 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USER }} -p "${{ secrets.DOCKER_PASS }}" ${{ secrets.DOCKER_REGISTRY }}
 
       - name: Build Docker image
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME:$TAG_NAME
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME:$TAG_NAME --tag $IMAGE_NAME:latest
 
       - name: Run linter
         run: docker run $IMAGE_NAME:$TAG_NAME yarn lint
 
       - name: Publish Docker image
-        run: docker push $IMAGE_NAME:$TAG_NAME
+        run: docker push $IMAGE_NAME --all-tags
