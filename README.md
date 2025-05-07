@@ -74,18 +74,20 @@ the container, this does not happen automatically:
 
 ### Using a docker image from the registry
 
-If you are a member of the CWI DIS group you can download the image from the registry. Tom or Jack can provide you with the credentials needed for the login.
+If you are a member of the CWI DIS group you can download the image from the
+registry. Tom or Jack can provide you with the credentials needed for the login.
+To launch the orchestrator on port 8090 with log level set to `debug`:
 
-```
-docker compose stop
-docker login registry.dis.cwi.nl
-... enter the credentials...
-docker pull registry.dis.cwi.nl/vr2gather-orchestrator-v2:2.7.1
-docker image tag registry.dis.cwi.nl/vr2gather-orchestrator-v2:2.7.1 registry.dis.cwi.nl/vr2gather-orchestrator-v2:latest
-docker compose up
-```
+    docker login registry.dis.cwi.nl
+    ... enter the credentials...
+    docker run -p 8090-8099:8090-8099 -p 9000-9100:9000-9100/udp -e PORT=8090 -e LOG_LEVEL=debug registry.dis.cwi.nl/vr2gather-orchestrator-v2:[VERSION] yarn start
 
-You replace `2.7.1` with the version you want to run. And probably Tom will fix things and edit this.
+Replace `[VERSION]` with the version you want to run. If you have any external SFU
+that needs to be configured, mount the directory containing the config files
+by adding the option `-v` and replacing `[PATH_TO_DIRECTORY]` with the path of
+the folder containing the config files:
+
+    docker run -p 8090-8099:8090-8099 -p 9000-9100:9000-9100/udp -e PORT=8090 -e LOG_LEVEL=debug -v [PATH_TO_DIRECTORY]:/code/config registry.dis.cwi.nl/vr2gather-orchestrator-v2:[VERSION] yarn start
 
 ## Development
 
