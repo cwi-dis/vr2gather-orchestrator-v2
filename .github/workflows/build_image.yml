@@ -29,7 +29,6 @@ jobs:
         run: |
           ./external-packages/get_dash_sfu.sh ${{ env.DASH_SFU_VERSION }}
           ./external-packages/get_webrtc_sfu.sh ${{ env.WEBRTC_SFU_VERSION }}
-          ls -lR packages
 
       - name: Build Docker image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME:$TAG_NAME --tag $IMAGE_NAME:latest
