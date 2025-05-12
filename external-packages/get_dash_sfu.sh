@@ -13,7 +13,7 @@ x*)
 esac
 set -e
 set -x
-external_package_dir==$(realpath $(dirname $0))
+external_package_dir=$(realpath $(dirname $0))
 cd $external_package_dir
 mkdir -p tmp
 
