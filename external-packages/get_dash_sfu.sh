@@ -23,5 +23,6 @@ curl --location --output tmp/$distr.tar.gz https://github.com/MotionSpell/lldash
 rm -rf tmp/$distr
 (cd tmp && tar xfv $distr.tar.gz)
 rm -rf ../packages/lldash
+mkdir -p ../packages
 mv tmp/$distr ../packages/lldash
 rm -rf tmp
