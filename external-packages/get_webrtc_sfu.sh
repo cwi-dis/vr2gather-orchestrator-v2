@@ -11,6 +11,7 @@ x*)
 	release=$1
 	;;
 esac
+set -e
 set -x
 mkdir -p tmp
 
