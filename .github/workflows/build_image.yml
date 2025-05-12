@@ -25,15 +25,11 @@ jobs:
       - name: Login to registry
         run: docker login -u ${{ secrets.DOCKER_USER }} -p "${{ secrets.DOCKER_PASS }}" ${{ secrets.DOCKER_REGISTRY }}
 
-      - name: Get dash SFU
+      - name: Get dash and webrtc SFU
         run: |
-          cd external-packages
-          ./get_dash_sfu.sh ${{ env.DASH_SFU_VERSION }}
-
-      - name: Get webrtc SFU
-        run: |
-          cd external-packages
-          ./get_webrtc_sfu.sh ${{ env.WEBRTC_SFU_VERSION }}
+          ./external-packages/get_dash_sfu.sh ${{ env.DASH_SFU_VERSION }}
+          ./external-packages/get_webrtc_sfu.sh ${{ env.WEBRTC_SFU_VERSION }}
+          ls -lR packages
 
       - name: Build Docker image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME:$TAG_NAME --tag $IMAGE_NAME:latest

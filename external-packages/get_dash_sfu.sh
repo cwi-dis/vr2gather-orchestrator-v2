@@ -13,6 +13,8 @@ x*)
 esac
 set -e
 set -x
+external_package_dir==$(realpath $(dirname $0))
+cd $external_package_dir
 mkdir -p tmp
 
 distr=lldash-linux-x86_64-${release}
@@ -21,6 +23,5 @@ curl --location --output tmp/$distr.tar.gz https://github.com/MotionSpell/lldash
 rm -rf tmp/$distr
 (cd tmp && tar xfv $distr.tar.gz)
 rm -rf ../packages/lldash
-mkdir -p ../packages/lldash
 mv tmp/$distr ../packages/lldash
 rm -rf tmp

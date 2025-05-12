@@ -13,6 +13,8 @@ x*)
 esac
 set -e
 set -x
+external_package_dir==$(realpath $(dirname $0))
+cd $external_package_dir
 mkdir -p tmp
 
 curl --location --output tmp/webrtcsfu-linux.tgz https://github.com/jvdrhoof/WebRTCSFU/releases/download/${release}/webrtcsfu-x86_64-unknown-linux.tgz
