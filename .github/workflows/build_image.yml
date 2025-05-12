@@ -4,7 +4,9 @@ on:
   push:
     tags:
       - '*'
-
+env:
+  DASH_SFU_VERSION: v0.9.7
+  WEBRTC_SFU_VERSION: v0.9.6
 jobs:
   build:
     name: Build docker image and push to registry
@@ -22,6 +24,16 @@ jobs:
 
       - name: Login to registry
         run: docker login -u ${{ secrets.DOCKER_USER }} -p "${{ secrets.DOCKER_PASS }}" ${{ secrets.DOCKER_REGISTRY }}
+
+      - name: Get dash SFU
+        run: |
+          cd external-packages
+          ./get_dash_sfu.sh ${{ env.DASH_SFU_VERSION }}
+
+      - name: Get webrtc SFU
+        run: |
+          cd external-packages
+          ./get_webrtc_sfu.sh ${{ env.WEBRTC_SFU_VERSION }}
 
       - name: Build Docker image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME:$TAG_NAME --tag $IMAGE_NAME:latest
