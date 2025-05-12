@@ -15,8 +15,6 @@ set -x
 mkdir -p tmp
 
 curl --location --output tmp/webrtcsfu-linux.tgz https://github.com/jvdrhoof/WebRTCSFU/releases/download/${release}/webrtcsfu-x86_64-unknown-linux.tgz
-# curl --location --output tmp/webrtcsfu-macos.tgz https://github.com/jvdrhoof/WebRTCSFU/releases/download/${release}/webrtcsfu-x86_64-apple-darwin.tgz
-# curl --location --output tmp/webrtcsfu-win.tgz https://github.com/jvdrhoof/WebRTCSFU/releases/download/${release}/webrtcsfu-x86_64-unknown-windows.tgz
 
 rm -rf tmp/webrtc
 mkdir tmp/webrtc
