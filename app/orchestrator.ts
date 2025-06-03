@@ -117,6 +117,18 @@ class Orchestrator implements Serializable {
     }, {});
   }
 
+  /**
+   * Resets the orchestrator's internal state tree, removing all sessions and users.
+   * This method closes all sessions and cleans up any external transports.
+   */
+  public reset() {
+    this.#sessions.forEach((s) => s.closeSession());
+    this.#sessions = [];
+
+    this.#users = [];
+    this.#transportManager.cleanupTransports();
+  }
+
   public serialize() {
     return {
       id: this.id,
