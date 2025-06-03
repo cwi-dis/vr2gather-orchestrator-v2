@@ -93,9 +93,13 @@
             const logBuffer = new RingBuffer(100);
 
             logSocket.on("message", ({ timestamp, level, message}) => {
+              if (message.startsWith("[DUMPDATA]")) {
+                return;
+              }
+
               logBuffer.add({ timestamp, level, message});
 
-              logContainer.innerHTML = logBuffer.get().map(log => {
+              logContainer.innerHTML = logBuffer.get().map((log) => {
                 return `<p class="is-family-monospace">${log.timestamp} ${removeAnsiColorCodes(log.level)}: ${log.message}</p>`;
               }).join("");
 
