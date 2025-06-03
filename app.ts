@@ -66,7 +66,7 @@ io.on("connection", async (socket) => {
   });
 
   // Installing util handlers
-  installUtilHandlers(orchestrator, socket);
+  installUtilHandlers(orchestrator, socket, io);
 
   try {
     logger.debug(`Client socket connected from ${socket.handshake.address}, awaiting login...`);

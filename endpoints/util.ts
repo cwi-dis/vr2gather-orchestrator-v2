@@ -1,4 +1,4 @@
-import { Socket } from "socket.io";
+import { Server, Socket } from "socket.io";
 
 import * as util from "../util";
 import logger from "../logger";
@@ -6,7 +6,7 @@ import EndpointNames from "./endpoint_names";
 import ErrorCodes from "./error_codes";
 import Orchestrator from "../app/orchestrator";
 
-const installHandlers = (orchestrator: Orchestrator, socket: Socket) => {
+const installHandlers = (orchestrator: Orchestrator, socket: Socket, io: Server) => {
   /**
    * Returns the version of the orchestrator inside a JSON object.
    */
@@ -44,6 +44,17 @@ const installHandlers = (orchestrator: Orchestrator, socket: Socket) => {
     callback(
       util.createCommandResponse(data, ErrorCodes.OK, orchestrator.serialize())
     );
+  });
+
+  /**
+   * Resets the orchestrator's internal state tree and disconnects all sockets.
+   */
+  socket.on(EndpointNames.RESET_ORCHESTRATOR, (callback) => {
+    logger.debug(EndpointNames.RESET_ORCHESTRATOR, "Resetting orchestrator");
+    orchestrator.reset();
+
+    callback();
+    io.disconnectSockets(true);
   });
 
   /**
