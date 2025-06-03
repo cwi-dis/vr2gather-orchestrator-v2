@@ -1,16 +1,20 @@
 FROM ubuntu:24.04
 
-ADD . /code/
-ADD ./package[s] /packages
-
 WORKDIR /code
 
 RUN apt update && \
     apt install -y python3 npm && \
     npm install -g yarn
 
-RUN yarn install && \
-    yarn build && \
+ADD ./package[s] /packages
+
+ADD ./package.json /code/package.json
+ADD ./yarn.lock /code/yarn.lock
+
+RUN yarn install
+
+ADD . /code/
+RUN yarn build && \
     yarn cache clean --all
 
 EXPOSE 8090
