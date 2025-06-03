@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>VR2Gather Orchestrator Admin Interface</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css" />
+
+    <script type="text/javascript" src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script type="text/javascript">
+      document.addEventListener("DOMContentLoaded", () => {
+        const socket = io();
+
+        const tree = document.querySelector("#tree");
+        const lastUpdate = document.querySelector("#last-update");
+        const relaunchBtn = document.querySelector("#relaunch-btn");
+
+        const fetchTree = () => {
+          socket.emit("DumpData", {}, (data) => {
+            const { message, body } = data;
+
+            if (message == "OK") {
+              tree.innerHTML = `<pre>${JSON.stringify(body, null, 2)}</pre>`
+              lastUpdate.textContent = new Date().toLocaleString();
+            }
+          });
+        };
+
+        socket.on("connect", () => {
+          if (tree && lastUpdate && relaunchBtn) {
+            relaunchBtn.disabled = false;
+
+            const treeInterval = setInterval(fetchTree, 5000);
+            fetchTree();
+
+            relaunchBtn.addEventListener("click", () => {
+              if (window.confirm("Are you sure you want to relaunch the Orchestrator? All current data will be lost.")) {
+                socket.emit("TerminateOrchestrator", () => {
+                  clearInterval(treeInterval);
+                  relaunchBtn.disabled = true;
+
+                  lastUpdate.textContent = "";
+                  lastUpdate.parentElement.hidden = true;
+
+                  tree.innerHTML = "<div class=\"notification is-warning\">Orchestrator is being relaunched. Please wait a few seconds for the page to reload...</div>";
+
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 5000);
+                });
+              }
+            });
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <section class="section">
+        <h1 class="title is-3">VR2Gather Orchestrator Admin Interface</h1>
+        <h2 class="subtitle is-4">Version: <%= orchestrator_version %></h2>
+
+        <div class="block">
+          <h2 class="title is-4">State tree</h2>
+          <p>Last Update: <span id="last-update"></span></p>
+          <div id="tree" class="block"></div>
+        </div>
+
+        <button id="relaunch-btn" class="button is-link" disabled>Relaunch Orchestrator</button>
+      </div>
+    </section>
+  </body>
+</html>
