@@ -70,19 +70,19 @@
             fetchTree();
 
             relaunchBtn.addEventListener("click", () => {
-              if (window.confirm("Are you sure you want to relaunch the Orchestrator? All current data will be lost.")) {
-                utilSocket.emit("TerminateOrchestrator", () => {
+              if (window.confirm("Are you sure you want to reset the Orchestrator? All current data will be lost.")) {
+                utilSocket.emit("ResetOrchestrator", () => {
                   clearInterval(treeInterval);
                   relaunchBtn.disabled = true;
 
                   lastUpdate.textContent = "";
                   lastUpdate.parentElement.hidden = true;
 
-                  tree.innerHTML = "<div class=\"notification is-warning\">Orchestrator is being relaunched. Please 10 seconds for the page to reload...</div>";
+                  tree.innerHTML = "<div class=\"notification is-warning\">Orchestrator is being relaunched. Please wait 5 seconds for the page to reload...</div>";
 
                   setTimeout(() => {
                     window.location.reload();
-                  }, 10000);
+                  }, 5000);
                 });
               }
             });
