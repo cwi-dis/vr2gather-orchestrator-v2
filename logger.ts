@@ -1,5 +1,6 @@
 import { createLogger, format, transports } from "winston";
 import socketIOTransport from "winston-socket.io";
+import { Request, Response, NextFunction } from "express";
 
 import { getFromEnvironment } from "./util";
 import EndpointNames from "./endpoints/endpoint_names";
@@ -16,7 +17,7 @@ const logger = createLogger({
   format: format.combine(
     format.colorize(),
     format.timestamp({
-      format: "[[]YYYY-MM-DD HH:mm:ss.SSS[]]"
+      format: "[[]YYYY-MM-DD HH:mm:ss.SSSZZ[]]"
     }),
     format.printf((info) => {
       return `${info.timestamp} ${info.level}: ${info.message}`;
@@ -71,8 +72,11 @@ export default {
   error: formatLogMessage(logger.error),
   warn: formatLogMessage(logger.warn),
   info: formatLogMessage(logger.info),
-  http: formatLogMessage(logger.http),
   verbose: formatLogMessage(logger.verbose),
   debug: formatLogMessage(logger.debug),
-  silly: formatLogMessage(logger.silly)
+  silly: formatLogMessage(logger.silly),
+  http: (req: Request, res: Response, next: NextFunction) => {
+    logger.http(`${req.ip} ${req.method} ${req.originalUrl} - ${res.statusCode} ${req.get("Content-Length") || 0} - ${req.get("User-Agent") || "unknown"}`);
+    next();
+  }
 };
