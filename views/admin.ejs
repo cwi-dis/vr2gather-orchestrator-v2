@@ -30,6 +30,7 @@
           if (this.buffer.length >= this.size) {
             this.buffer.shift();
           }
+
           this.buffer.push(item);
         }
 
@@ -48,6 +49,7 @@
         const tree = document.querySelector("#tree");
         const lastUpdate = document.querySelector("#last-update");
         const relaunchBtn = document.querySelector("#relaunch-btn");
+        const logContainer = document.querySelector("#log");
 
         const connectedTag = document.querySelector("#connected-tag");
         const disconnectedTag = document.querySelector("#disconnected-tag");
@@ -79,14 +81,12 @@
                   clearInterval(treeInterval);
                   relaunchBtn.disabled = true;
 
-                  lastUpdate.textContent = "";
-                  lastUpdate.parentElement.hidden = true;
-
-                  tree.innerHTML = "<div class=\"notification is-warning\">Orchestrator is being relaunched. Please wait 5 seconds for the page to reload...</div>";
+                  tree.parentElement.innerHTML = "<div class=\"notification is-warning\">The Orchestrator is being relaunched. Please wait 3 seconds for the page to reload...</div>";
+                  logContainer.parentElement.hidden = true;
 
                   setTimeout(() => {
                     window.location.reload();
-                  }, 5000);
+                  }, 3000);
                 });
               }
             });
@@ -104,7 +104,6 @@
         });
 
         const logSocket = io("/log");
-        const logContainer = document.querySelector("#log");
 
         logSocket.on("connect", () => {
           if (logContainer) {
