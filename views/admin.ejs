@@ -117,7 +117,7 @@
               logBuffer.add({ timestamp, level, message});
 
               logContainer.innerHTML = logBuffer.get().map((log) => {
-                return `<p class="is-family-monospace">${log.timestamp} ${removeAnsiColorCodes(log.level)}: ${log.message}</p>`;
+                return `<p class="is-family-monospace">[${new Date(timestamp.slice(1, -1)).toLocaleString()}] ${removeAnsiColorCodes(log.level)}: ${log.message}</p>`;
               }).join("");
 
               logContainer.scrollTop = logContainer.scrollHeight;
