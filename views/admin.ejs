@@ -107,7 +107,7 @@
 
         logSocket.on("connect", () => {
           if (logContainer) {
-            const logBuffer = new RingBuffer(100);
+            const logBuffer = new RingBuffer(1000);
 
             logSocket.on("message", ({ timestamp, level, message}) => {
               if (message.startsWith("[DUMPDATA]")) {
