@@ -20,6 +20,8 @@
 
     <script type="text/javascript" src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <script type="text/javascript">
+      // @ts-check
+
       class RingBuffer {
         constructor(size) {
           this.size = size;
@@ -46,20 +48,26 @@
       document.addEventListener("DOMContentLoaded", () => {
         const utilSocket = io();
 
-        const tree = document.querySelector("#tree");
+        const treeContainer = document.querySelector("#tree");
         const lastUpdate = document.querySelector("#last-update");
-        const relaunchBtn = document.querySelector("#relaunch-btn");
         const logContainer = document.querySelector("#log");
+        /** @type {HTMLButtonElement | null} */
+        const relaunchBtn = document.querySelector("#relaunch-btn");
 
         const connectedTag = document.querySelector("#connected-tag");
         const disconnectedTag = document.querySelector("#disconnected-tag");
+
+        if (!treeContainer || !lastUpdate || !relaunchBtn || !logContainer || !connectedTag || !disconnectedTag) {
+          console.error("Required elements not found in the DOM.");
+          return;
+        }
 
         const fetchTree = () => {
           utilSocket.emit("DumpData", {}, (data) => {
             const { message, body } = data;
 
             if (message == "OK") {
-              tree.innerHTML = `<pre>${JSON.stringify(body, null, 2)}</pre>`
+              treeContainer.innerHTML = `<pre>${JSON.stringify(body, null, 2)}</pre>`
               lastUpdate.textContent = new Date().toLocaleString();
             }
           });
@@ -69,28 +77,31 @@
           connectedTag.classList.remove("is-hidden");
           disconnectedTag.classList.add("is-hidden");
 
-          if (tree && lastUpdate && relaunchBtn) {
-            relaunchBtn.disabled = false;
+          relaunchBtn.disabled = false;
 
-            const treeInterval = setInterval(fetchTree, 1000);
-            fetchTree();
+          const treeInterval = setInterval(fetchTree, 1000);
+          fetchTree();
 
-            relaunchBtn.addEventListener("click", () => {
-              if (window.confirm("Are you sure you want to reset the Orchestrator? All current data will be lost.")) {
-                utilSocket.emit("ResetOrchestrator", () => {
-                  clearInterval(treeInterval);
-                  relaunchBtn.disabled = true;
+          relaunchBtn.addEventListener("click", () => {
+            if (window.confirm("Are you sure you want to reset the Orchestrator? All current data will be lost.")) {
+              utilSocket.emit("ResetOrchestrator", () => {
+                clearInterval(treeInterval);
+                relaunchBtn.disabled = true;
 
-                  tree.parentElement.innerHTML = "<div class=\"notification is-warning\">The Orchestrator is being relaunched. Please wait 3 seconds for the page to reload...</div>";
+                if (treeContainer.parentElement) {
+                  treeContainer.parentElement.innerHTML = "<div class=\"notification is-warning\">The Orchestrator is being relaunched. Please wait 3 seconds for the page to reload...</div>";
+                }
+
+                if (logContainer.parentElement) {
                   logContainer.parentElement.hidden = true;
+                }
 
-                  setTimeout(() => {
-                    window.location.reload();
-                  }, 3000);
-                });
-              }
-            });
-          }
+                setTimeout(() => {
+                  window.location.reload();
+                }, 3000);
+              });
+            }
+          });
         });
 
         utilSocket.on("disconnect", () => {
@@ -110,14 +121,16 @@
             const logBuffer = new RingBuffer(1000);
 
             logSocket.on("message", ({ timestamp, level, message}) => {
-              if (message.startsWith("[DUMPDATA]") || level === "http") {
+              const sanitisedLevel = removeAnsiColorCodes(level);
+
+              if (message.startsWith("[DUMPDATA]") || sanitisedLevel === "http") {
                 return;
               }
 
-              logBuffer.add({ timestamp, level, message});
+              logBuffer.add({ timestamp, level: sanitisedLevel, message});
 
               logContainer.innerHTML = logBuffer.get().map((log) => {
-                return `<p class="is-family-monospace">[${new Date(timestamp.slice(1, -1)).toLocaleString()}] ${removeAnsiColorCodes(log.level)}: ${log.message}</p>`;
+                return `<p class="is-family-monospace">[${new Date(timestamp.slice(1, -1)).toLocaleString()}] ${log.level}: ${log.message}</p>`;
               }).join("");
 
               logContainer.scrollTop = logContainer.scrollHeight;
