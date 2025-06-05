@@ -110,7 +110,7 @@
             const logBuffer = new RingBuffer(1000);
 
             logSocket.on("message", ({ timestamp, level, message}) => {
-              if (message.startsWith("[DUMPDATA]")) {
+              if (message.startsWith("[DUMPDATA]") || level === "http") {
                 return;
               }
 
