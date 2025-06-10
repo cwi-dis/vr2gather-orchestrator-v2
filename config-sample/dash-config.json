@@ -25,6 +25,8 @@
   "commandLine": [
     "/packages/lldash/bin/evanescent.exe",
     "--port",
-    "%SFU_PORT%"
+    "%SFU_PORT%",
+    "--long-poll",
+    "1000"
   ]
 }
