@@ -11,6 +11,9 @@ ADD ./package[s] /packages
 ADD ./package.json /code/package.json
 ADD ./yarn.lock /code/yarn.lock
 
+ADD ./.env-sample /code/.env
+ADD ./config/config-sample /code/config
+
 RUN yarn install
 
 ADD . /code/
