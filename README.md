@@ -80,16 +80,12 @@ To launch the orchestrator on port 8090 with log level set to `debug`:
 
     docker login registry.dis.cwi.nl
     ... enter the credentials...
-    docker run -e PORT=8090 -e LOG_LEVEL=debug registry.dis.cwi.nl/vr2gather-orchestrator-v2:[VERSION] yarn start
+    docker compose stop
+    docker pull registry.dis.cwi.nl/vr2gather-orchestrator-v2:[VERSION]
+    docker compose up
 
 Replace `[VERSION]` with the version you want to run, or use `latest` to get
-the latest version. If you have any external SFU that needs to be configured,
-you need to expose the ports that the SFU will be listening on by using the
-option `-p` followed by the ports and mount the directory containing the config
-files by adding the option `-v` and replacing `[PATH_TO_DIRECTORY]` with the
-path of the folder containing the config files:
-
-    docker run -p 8090-8099:8090-8099 -p 9000-9100:9000-9100/udp -e PORT=8090 -e LOG_LEVEL=debug -v [PATH_TO_DIRECTORY]:/code/config registry.dis.cwi.nl/vr2gather-orchestrator-v2:[VERSION] yarn start
+the latest version.
 
 ## Development
 
