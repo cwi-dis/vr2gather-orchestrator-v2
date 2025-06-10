@@ -14,10 +14,9 @@ Check <https://github.com/jvdrhoof/WebRTCSFU> for the latest current release _vX
 
 ##  dash sfu
 
-The dash SFU is called `evanescent`. It is part of the soon-to-be-open-source `lldash` package. It is obtained from the <https://github.com/cwi-dis/lldash> repository.
-
-To install it inspect the github repository for the latest release. Edit and run
+The dash SFU is called `evanescent`. It is part of the soon-to-be-open-source `lldash` package. It is obtained from the <https://github.com/MotionSpell/lldash> repository. Inspect the releases and remember the version of the latest release **without the `v` prefix**.
+Run
 
 ```
-./get_evanescent_sfu.sh
+./get_dash_sfu.sh X.Y.Z
 ```

@@ -1,11 +1,10 @@
 name: Build and publish image
-
 on:
   push:
     tags:
       - '*'
 env:
-  DASH_SFU_VERSION: 0.9.7
+  DASH_SFU_VERSION: 0.9.9
   WEBRTC_SFU_VERSION: v0.9.6
 jobs:
   build:
