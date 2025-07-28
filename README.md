@@ -103,11 +103,12 @@ run:
 After compiling it, make sure to copy the file `.env-sample` to `.env` and
 update the environment variables as needed. Moreover, copy the file
 `config/config-sample/ntp-config.json` to `config/ntp-config.json` and change
-the hostname/port of your time server if needed. 
-Then you may want to install versions of the Dash and WebRTC SFUs that are compatible with your development machine, and ensure that `dash-config.json` and `webrtc-config.json` have the right pathnames.
+the hostname/port of your time server if needed. Then you may want to install
+versions of the Dash and WebRTC SFUs that are compatible with your development
+machine, and ensure that `dash-config.json` and `webrtc-config.json` have the
+right pathnames.
 
-Finally, the application server
-can be launched as follows:
+Finally, the application server can be launched as follows:
 
     yarn start
 
@@ -144,3 +145,11 @@ If the orchestrator instance is running inside a Docker container using the
 supplied `docker-compose.yml` configuration, the Docker daemon will relaunch
 the container immediately. All data stored in the orchestrator at the time of
 termination will be lost.
+
+## Admin interface
+
+If you set the environment variables `ADMIN_USER` and `ADMIN_PASSWORD` in your
+`.env`, a web-based debugging tool will be enabled. This interface allows you
+to inspect the current state tree and log messages through a web interface.
+The debugging interface can be accessed by opening http://localhost:8090/admin
+(or whatever host/port the Orchestrator is running on) in a web browser.
