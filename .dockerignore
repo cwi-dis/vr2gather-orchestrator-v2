@@ -1,5 +1,10 @@
 **/.git
+**/.github
 **/node_modules
+**/.vscode
 **/.yarn/cache
 .env
+.gitattributes
 **/config
+Dockerfile
+docker-compose.yml
