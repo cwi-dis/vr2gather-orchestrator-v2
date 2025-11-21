@@ -63,6 +63,10 @@ the folder `/packages`. Keep this in mind when writing SFU config files. The
 corresponding config file must be placed into the folder `config/`. See the
 file `config/config-sample/webrtc-config.json` as a sample.
 
+#### Getting external SFUs for DASH and WebRTC
+
+Instructions are in [external-packages/README.md](external-packages/README.md).
+
 ### Rebuilding the docker image
 
 If you have changed the configuration or SFU binaries you will have to rebuild
