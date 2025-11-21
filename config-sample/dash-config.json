@@ -23,7 +23,7 @@
   "logFilePfx": "sfu-",
   "logFileSfx": ".log",
   "commandLine": [
-    "/packages/lldash/bin/evanescent.exe",
+    "/packages/lldash/bin/lldash-relay.exe",
     "--port",
     "%SFU_PORT%",
     "--long-poll",
