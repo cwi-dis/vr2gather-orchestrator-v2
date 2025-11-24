@@ -4,7 +4,7 @@ on:
     tags:
       - '*'
 env:
-  DASH_SFU_VERSION: 0.9.9
+  DASH_SFU_VERSION: 0.99.8
   WEBRTC_SFU_VERSION: v0.9.6
 jobs:
   build:

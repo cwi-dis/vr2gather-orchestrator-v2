@@ -67,6 +67,8 @@ file `config/config-sample/webrtc-config.json` as a sample.
 
 Instructions are in [external-packages/README.md](external-packages/README.md).
 
+> Note: also update the references in `.github/build_image.yml`.
+
 ### Rebuilding the docker image
 
 If you have changed the configuration or SFU binaries you will have to rebuild
